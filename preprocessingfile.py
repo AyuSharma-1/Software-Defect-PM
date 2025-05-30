@@ -8,7 +8,7 @@ from imblearn.over_sampling import SMOTE
 #add dataset normalization and feature selection function
 
 def my_sdp_preprocessor(datafilename_as_csv_inquotes):
-    original_data = pd.read_csv(datafilename_as_csv_inquotes)
+    original_data = pd.read_csv('pc2.csv')
     original_data.isnull().values.any() #Gives false ie:No null value in dataset
     original_data = original_data.fillna(value=False)
     original_X = pd.DataFrame(original_data.drop(['defects'],axis=1))
@@ -19,8 +19,8 @@ def my_sdp_preprocessor(datafilename_as_csv_inquotes):
     
     #now we resample, and from that we take training and validation sets
     
-    sm = SMOTE(random_state=12, ratio = 1.0)
-    x, y = sm.fit_sample(x_train1, y_train1)
+    sm = SMOTE(random_state=12, sampling_strategy = 1.0)
+    x, y = sm.fit_resample(x_train1, y_train1)
     y_train2 = pd.DataFrame(y, columns=['defects'])
     x_train2 = pd.DataFrame(x, columns=original_X.columns)
     
