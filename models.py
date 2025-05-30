@@ -3,39 +3,30 @@ import preprocessingfile as preprocess
 #original_data, original_X, original_Y,combined_training_data,x_train1,x_train2,x_train,x_test,x_val,y_train1,y_train2,y_train,y_test,y_val = preprocess.my_sdp_preprocessor('pc2.csv')
 #all_data = original_data, original_X, original_Y,combined_training_data,x_train1,x_train2,x_train,x_test,x_val,y_train1,y_train2,y_train,y_test,y_val 
 def NN(original_data, original_X, original_Y,combined_training_data,x_train1,x_train2,x_train,x_test,x_val,y_train1,y_train2,y_train,y_test,y_val):   
-    # Importing the Keras libraries and packages
-    import keras
     from keras.models import Sequential
     from keras.layers import Dense
-    
-    # Initialising the ANN
+    import pandas as pd
+    from sklearn.metrics import confusion_matrix, accuracy_score
+
     classifier = Sequential()
-    
-    # Adding the input layer and the first hidden layer
-    classifier.add(Dense(output_dim = 15, init = 'uniform', activation = 'relu', input_dim = len(original_X.columns)))
-    # Adding the second hidden layer
-    classifier.add(Dense(output_dim = 8, init = 'uniform', activation = 'relu'))
-    classifier.add(Dense(output_dim = 5, init = 'uniform', activation = 'relu'))
-    # Adding the output layer
-    classifier.add(Dense(output_dim = 1, init = 'uniform', activation = 'sigmoid'))
-    # Compiling the ANN
-    
-    classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
-    # Fitting the ANN to the Training set
-    classifier.fit(x_train, y_train, batch_size = 10, nb_epoch = 100)
-    
-    #Making the predictions and evaluating the model
-    # Predicting the Test set results
+    classifier.add(Dense(units=15, kernel_initializer='uniform', activation='relu', input_dim=len(original_X.columns)))
+    classifier.add(Dense(units=8, kernel_initializer='uniform', activation='relu'))
+    classifier.add(Dense(units=5, kernel_initializer='uniform', activation='relu'))
+    classifier.add(Dense(units=1, kernel_initializer='uniform', activation='sigmoid'))
+
+    classifier.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+    classifier.fit(x_train, y_train, batch_size=10, epochs=100)
+
     y_pred = classifier.predict(x_val)
     y_pred = (y_pred > 0.5)
     y_pred = pd.DataFrame(y_pred, columns=['defects'])
-    # Making the Confusion Matrix
-    from sklearn.metrics import confusion_matrix
+
     cm = confusion_matrix(y_val, y_pred)
-    from sklearn.metrics import accuracy_score
-    accuracy_score(y_val, y_pred)
-    
+    acc = accuracy_score(y_val, y_pred)
+
     return classifier
+
 
     
 def random_forest(original_data, original_X, original_Y,combined_training_data,x_train1,x_train2,x_train,x_test,x_val,y_train1,y_train2,y_train,y_test,y_val):
