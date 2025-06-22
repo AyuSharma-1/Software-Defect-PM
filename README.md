@@ -76,4 +76,3 @@ other dimensionality reduction techniques.
 | `pip install -r requirements.txt`                                    | Install dependencies  |
 | `python logistic_regression_ensembler.py`                            | Run the full pipeline |
 
-
